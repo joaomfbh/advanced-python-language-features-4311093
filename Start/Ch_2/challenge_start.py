@@ -13,10 +13,18 @@
 
 
 def string_combiner(*args, unique=False):
+    """This function combine argument values as strings
+        Parameters:
+        Arguments: Could be str or int. Other types will be ignored
+        Keyword-only argument: Default is False. If true, remove duplicates characters from combined string
+    """
     result = ""
-
-    # YOUR CODE HERE
-
+    for arg in args:
+        if type(arg) is str or type(arg) is int or type(arg) is bool:
+            result += str(arg)
+    if unique:
+        result = "".join(set(result))
+        
     return result
 
 
