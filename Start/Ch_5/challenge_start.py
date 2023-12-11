@@ -1,3 +1,4 @@
+from enum import Enum
 # Example file for Advanced Python: Language Features by Joe Marini
 # Programming challenge for Structural Pattern Matching
 
@@ -38,4 +39,37 @@ test_orders = [
     ]
 ]
 
-# TODO: process each order
+class Laundry(Enum):
+    dry_clean = 12.95
+    starch = 2.0
+    same_day_svc = 10.0
+    wash_and_fold = 4.95
+    blankets = 25.0
+
+
+for orders in test_orders:
+    order_total = 0.0
+    for order in orders:
+        match order:
+            # Wash and Fold
+            case str() as desc, float() as weight:
+                print(f"Wash and Fold: {desc}, weight: {weight}")
+                order_total += weight * Laundry.wash_and_fold.value
+                if weight >= 15.0:
+                    order_total -= order_total * 0.1
+            # Blankets        
+            case str() as type, bool() as dryclean, str() as size:
+                print(f"Blankets: ({size}) {type}", "Dry Clean" if dryclean else "")
+                order_total += Laundry.blankets.value
+            # Dry Clean
+            case str() as garment, str() as size, bool() as starch, bool() as same_day:
+                print(f"Dry Clean: ({size}) {garment}", "Starched" if starch else "",
+                      "Same Day" if same_day else "")
+                order_total += Laundry.dry_clean.value
+                if starch:
+                    order_total += Laundry.starch.value
+                if same_day:
+                    order_total += Laundry.same_day_svc.value
+
+    print(f"Order total: {order_total:.2f}")
+    print("-------------------")
